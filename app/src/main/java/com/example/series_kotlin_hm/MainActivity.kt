@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.series_kotlin_hm.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.ui.screen.MoviesScreen
 import com.example.series_kotlin_hm.ui.screen.PlayersScreen
 import com.example.series_kotlin_hm.ui.theme.SerieskotlinhmTheme
@@ -85,7 +87,7 @@ fun MainScreen() {
                 }
             }
         }
-    ) { innerPadding ->
+        ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = "players",
@@ -97,7 +99,35 @@ fun MainScreen() {
             }
             composable("movies") {
                 val viewModel: MoviesViewModel = viewModel()
-                MoviesScreen(viewModel = viewModel)
+                MoviesScreen(
+                    viewModel = viewModel,
+                    onMovieClick = { movie ->
+                        navController.navigate("movie_detail/${movie.id}")
+                    }
+                )
+            }
+            composable("movie_detail/{movieId}") { backStackEntry ->
+                val movieId = backStackEntry.arguments?.getString("movieId")?.toLongOrNull()
+                val viewModel: MoviesViewModel = viewModel()
+                val uiState by viewModel.uiState.collectAsState()
+                
+                val movie = uiState.movies.find { it.id == movieId }
+                
+                if (movie != null) {
+                    MovieDetailScreen(
+                        movie = movie,
+                        onBackClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
         }
     }

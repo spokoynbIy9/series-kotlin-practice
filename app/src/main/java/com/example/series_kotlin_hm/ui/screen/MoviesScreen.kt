@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.series_kotlin_hm.data.model.MovieUiModel
 import com.example.series_kotlin_hm.ui.components.MovieCard
 import com.example.series_kotlin_hm.viewmodel.MoviesViewModel
 
 @Composable
 fun MoviesScreen(
-    viewModel: MoviesViewModel
+    viewModel: MoviesViewModel,
+    onMovieClick: (MovieUiModel) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -69,7 +71,7 @@ fun MoviesScreen(
                             MovieCard(
                                 movie = movie,
                                 onClick = {
-                                    // TODO: Навигация к детальному экрану фильма
+                                    onMovieClick(movie)
                                 }
                             )
                         }

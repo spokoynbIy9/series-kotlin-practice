@@ -8,18 +8,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.series_kotlin_hm.data.model.MovieUiModel
 import com.example.series_kotlin_hm.ui.components.MovieCard
+import com.example.series_kotlin_hm.ui.theme.SerieskotlinhmTheme
 import com.example.series_kotlin_hm.viewmodel.MoviesViewModel
 
 @Composable
 fun MoviesScreen(
-    viewModel: MoviesViewModel,
     onMovieClick: (MovieUiModel) -> Unit = {}
 ) {
+    val viewModel: MoviesViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Box(
@@ -40,14 +41,13 @@ fun MoviesScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = uiState.title,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = uiState.description,
-                fontSize = 16.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -58,8 +58,7 @@ fun MoviesScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Popular Movies:",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))

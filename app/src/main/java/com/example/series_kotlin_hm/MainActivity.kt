@@ -21,11 +21,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.series_kotlin_hm.ui.navigation.BottomNavItem
+import com.example.series_kotlin_hm.ui.navigation.Routes
 import com.example.series_kotlin_hm.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.ui.screen.MoviesScreen
 import com.example.series_kotlin_hm.ui.screen.PlayersScreen
 import com.example.series_kotlin_hm.ui.theme.SerieskotlinhmTheme
-import com.example.series_kotlin_hm.viewmodel.MoviesViewModel
+import com.example.series_kotlin_hm.viewmodel.MovieDetailViewModel
 import com.example.series_kotlin_hm.viewmodel.PlayersViewModel
 
 class MainActivity : ComponentActivity() {
@@ -40,12 +42,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Модель для элементов навигации
-data class BottomNavItem(
-    val route: String,
-    val title: String,
-    val icon: ImageVector
-)
 
 @Composable
 fun MainScreen() {
@@ -55,12 +51,12 @@ fun MainScreen() {
 
     val bottomNavItems = listOf(
         BottomNavItem(
-            route = "players",
+            route = Routes.PLAYERS,
             title = "Players",
             icon = Icons.Default.Person
         ),
         BottomNavItem(
-            route = "movies",
+            route = Routes.MOVIES,
             title = "Movies",
             icon = Icons.Default.Search
         )
@@ -90,42 +86,57 @@ fun MainScreen() {
         ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "players",
+            startDestination = Routes.PLAYERS,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("players") {
+            composable(Routes.PLAYERS) {
                 val viewModel: PlayersViewModel = viewModel()
                 PlayersScreen(viewModel = viewModel)
             }
-            composable("movies") {
-                val viewModel: MoviesViewModel = viewModel()
+            composable(Routes.MOVIES) {
                 MoviesScreen(
-                    viewModel = viewModel,
                     onMovieClick = { movie ->
-                        navController.navigate("movie_detail/${movie.id}")
+                        navController.navigate(Routes.movieDetail(movie.id))
                     }
                 )
             }
-            composable("movie_detail/{movieId}") { backStackEntry ->
+            composable(Routes.MOVIE_DETAIL) { backStackEntry ->
                 val movieId = backStackEntry.arguments?.getString("movieId")?.toLongOrNull()
-                val viewModel: MoviesViewModel = viewModel()
+                val viewModel: MovieDetailViewModel = viewModel()
                 val uiState by viewModel.uiState.collectAsState()
                 
-                val movie = uiState.movies.find { it.id == movieId }
+                LaunchedEffect(movieId) {
+                    movieId?.let { viewModel.loadMovie(it) }
+                }
                 
-                if (movie != null) {
-                    MovieDetailScreen(
-                        movie = movie,
-                        onBackClick = {
-                            navController.popBackStack()
+                when {
+                    uiState.isLoading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
                         }
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
+                    }
+                    uiState.movie != null -> {
+                        uiState.movie?.let { movie ->
+                            MovieDetailScreen(
+                                movie = movie,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+                    }
+                    uiState.error != null -> {
+                        uiState.error?.let { error ->
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(error)
+                            }
+                        }
                     }
                 }
             }

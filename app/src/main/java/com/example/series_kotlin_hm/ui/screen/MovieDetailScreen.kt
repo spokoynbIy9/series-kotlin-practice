@@ -11,10 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.series_kotlin_hm.data.model.Genre
 import com.example.series_kotlin_hm.data.model.MovieUiModel
@@ -73,8 +71,7 @@ fun MovieDetailScreen(
             // Название фильма
             Text(
                 text = movie.name,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             
@@ -87,7 +84,7 @@ fun MovieDetailScreen(
                 movie.year?.let { year ->
                     Text(
                         text = year.toString(),
-                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -101,8 +98,7 @@ fun MovieDetailScreen(
                     ) {
                         Text(
                             text = "★ $rating",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                         )
@@ -116,8 +112,7 @@ fun MovieDetailScreen(
             if (movie.genres.isNotEmpty()) {
                 Text(
                     text = "Жанры:",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -133,7 +128,7 @@ fun MovieDetailScreen(
                         ) {
                             Text(
                                 text = genre.name,
-                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                             )
@@ -148,14 +143,13 @@ fun MovieDetailScreen(
             movie.movieLength?.let { length ->
                 Text(
                     text = "Длительность:",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${length} минут",
-                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -164,16 +158,14 @@ fun MovieDetailScreen(
             // Описание (заглушка)
             Text(
                 text = "Описание:",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Здесь будет подробное описание фильма. В будущем это описание можно будет получать из API или базы данных.",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 20.sp
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

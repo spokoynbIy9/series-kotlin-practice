@@ -1,4 +1,4 @@
-package com.example.series_kotlin_hm.ui.screen
+package com.example.series_kotlin_hm.presentation.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,14 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.series_kotlin_hm.data.model.Genre
-import com.example.series_kotlin_hm.data.model.MovieUiModel
-import com.example.series_kotlin_hm.data.model.Poster
-import com.example.series_kotlin_hm.data.model.Rating
-import com.example.series_kotlin_hm.ui.theme.SerieskotlinhmTheme
+import com.example.series_kotlin_hm.presentation.model.MovieUiModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -33,7 +28,7 @@ fun MovieDetailScreen(
             TopAppBar(
                 title = { 
                     Text(
-                        text = movie.name,
+                        text = movie.name ?: "Unknown",
                         maxLines = 1
                     ) 
                 },
@@ -57,7 +52,7 @@ fun MovieDetailScreen(
         ) {
             // Постер фильма
             AsyncImage(
-                model = movie.poster?.url,
+                model = movie.poster,
                 contentDescription = "Movie Poster",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,7 +65,7 @@ fun MovieDetailScreen(
             
             // Название фильма
             Text(
-                text = movie.name,
+                text = movie.name ?: "Unknown",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -89,7 +84,7 @@ fun MovieDetailScreen(
                     )
                 }
                 
-                movie.rating?.kp?.let { rating ->
+                movie.rating?.let { rating ->
                     Spacer(modifier = Modifier.width(16.dp))
                     Card(
                         colors = CardDefaults.cardColors(
@@ -127,7 +122,7 @@ fun MovieDetailScreen(
                             )
                         ) {
                             Text(
-                                text = genre.name,
+                                text = genre,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)

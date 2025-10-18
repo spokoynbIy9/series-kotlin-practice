@@ -1,7 +1,8 @@
-package com.example.series_kotlin_hm.viewmodel
+package com.example.series_kotlin_hm.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,7 @@ class PlayersViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true)
             
             // Симуляция загрузки данных
-            kotlinx.coroutines.delay(1000)
+            delay(1000)
             
             val mockPlayers = listOf(
                 "Player 1",

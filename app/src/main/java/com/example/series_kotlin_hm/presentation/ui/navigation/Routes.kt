@@ -1,4 +1,4 @@
-package com.example.series_kotlin_hm.ui.navigation
+package com.example.series_kotlin_hm.presentation.ui.navigation
 
 object Routes {
     const val PLAYERS = "players"

@@ -12,23 +12,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.series_kotlin_hm.ui.navigation.BottomNavItem
-import com.example.series_kotlin_hm.ui.navigation.Routes
-import com.example.series_kotlin_hm.ui.screen.MovieDetailScreen
-import com.example.series_kotlin_hm.ui.screen.MoviesScreen
-import com.example.series_kotlin_hm.ui.screen.PlayersScreen
-import com.example.series_kotlin_hm.ui.theme.SerieskotlinhmTheme
-import com.example.series_kotlin_hm.viewmodel.MovieDetailViewModel
-import com.example.series_kotlin_hm.viewmodel.PlayersViewModel
+import com.example.series_kotlin_hm.presentation.ui.navigation.BottomNavItem
+import com.example.series_kotlin_hm.presentation.ui.navigation.Routes
+import com.example.series_kotlin_hm.presentation.ui.screen.MovieDetailScreen
+import com.example.series_kotlin_hm.presentation.ui.screen.MoviesScreen
+import com.example.series_kotlin_hm.presentation.ui.screen.PlayersScreen
+import com.example.series_kotlin_hm.presentation.ui.theme.SerieskotlinhmTheme
+import com.example.series_kotlin_hm.presentation.viewmodel.MovieDetailViewModel
+import com.example.series_kotlin_hm.presentation.viewmodel.PlayersViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,12 +85,11 @@ fun MainScreen() {
         ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.PLAYERS,
+            startDestination = Routes.MOVIES,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Routes.PLAYERS) {
-                val viewModel: PlayersViewModel = viewModel()
-                PlayersScreen(viewModel = viewModel)
+                PlayersScreen()
             }
             composable(Routes.MOVIES) {
                 MoviesScreen(
@@ -102,7 +100,7 @@ fun MainScreen() {
             }
             composable(Routes.MOVIE_DETAIL) { backStackEntry ->
                 val movieId = backStackEntry.arguments?.getString("movieId")?.toLongOrNull()
-                val viewModel: MovieDetailViewModel = viewModel()
+                val viewModel: MovieDetailViewModel = koinViewModel()
                 val uiState by viewModel.uiState.collectAsState()
                 
                 LaunchedEffect(movieId) {

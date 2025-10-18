@@ -1,13 +1,13 @@
 package com.example.series_kotlin_hm.data.local
 
 import com.example.series_kotlin_hm.data.model.Genre
-import com.example.series_kotlin_hm.data.model.MovieUiModel
+import com.example.series_kotlin_hm.data.model.MovieModel
 import com.example.series_kotlin_hm.data.model.Poster
 import com.example.series_kotlin_hm.data.model.Rating
 
 object MockMovieData {
-    fun getMovies(): List<MovieUiModel> = listOf(
-        MovieUiModel(
+    fun getMovies(): List<MovieModel> = listOf(
+        MovieModel(
             id = 1L,
             name = "Брат 2",
             year = 2000,
@@ -20,7 +20,7 @@ object MockMovieData {
             ),
             movieLength = 127
         ),
-        MovieUiModel(
+        MovieModel(
             id = 2L,
             name = "Матрица",
             year = 1999,
@@ -32,7 +32,7 @@ object MockMovieData {
             ),
             movieLength = 136
         ),
-        MovieUiModel(
+        MovieModel(
             id = 3L,
             name = "Побег из Шоушенка",
             year = 1994,
@@ -43,7 +43,7 @@ object MockMovieData {
             ),
             movieLength = 142
         ),
-        MovieUiModel(
+        MovieModel(
             id = 4L,
             name = "Крестный отец",
             year = 1972,
@@ -55,7 +55,7 @@ object MockMovieData {
             ),
             movieLength = 175
         ),
-        MovieUiModel(
+        MovieModel(
             id = 5L,
             name = "Темный рыцарь",
             year = 2008,
@@ -68,7 +68,7 @@ object MockMovieData {
             ),
             movieLength = 152
         ),
-        MovieUiModel(
+        MovieModel(
             id = 6L,
             name = "Интерстеллар",
             year = 2014,
@@ -81,7 +81,7 @@ object MockMovieData {
             ),
             movieLength = 169
         ),
-        MovieUiModel(
+        MovieModel(
             id = 7L,
             name = "Начало",
             year = 2010,
@@ -94,7 +94,7 @@ object MockMovieData {
             ),
             movieLength = 148
         ),
-        MovieUiModel(
+        MovieModel(
             id = 8L,
             name = "Форрест Гамп",
             year = 1994,

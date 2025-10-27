@@ -1,4 +1,4 @@
-package com.example.series_kotlin_hm.ui.theme
+package com.example.series_kotlin_hm.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

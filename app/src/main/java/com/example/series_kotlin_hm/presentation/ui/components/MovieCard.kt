@@ -1,4 +1,4 @@
-package com.example.series_kotlin_hm.ui.components
+package com.example.series_kotlin_hm.presentation.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.series_kotlin_hm.data.model.MovieUiModel
+import com.example.series_kotlin_hm.presentation.model.MovieUiModel
 
 @Composable
 fun MovieCard(
@@ -35,7 +35,7 @@ fun MovieCard(
         ) {
             // Постер фильма
             AsyncImage(
-                model = movie.poster?.url,
+                model = movie.poster,
                 contentDescription = "Movie Poster",
                 modifier = Modifier
                     .size(60.dp)
@@ -49,7 +49,7 @@ fun MovieCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = movie.name,
+                    text = movie.name ?: "Unknown",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -68,7 +68,7 @@ fun MovieCard(
                         )
                     }
                     
-                    movie.rating?.kp?.let { rating ->
+                    movie.rating?.let { rating ->
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "★ $rating",
@@ -81,7 +81,7 @@ fun MovieCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = movie.genres.joinToString(", ") { it.name },
+                    text = movie.genres.joinToString(", ") { it },
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

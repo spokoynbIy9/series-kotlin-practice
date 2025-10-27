@@ -4,6 +4,8 @@ object Routes {
     const val PLAYERS = "players"
     const val MOVIES = "movies"
     const val MOVIE_DETAIL = "movie_detail/{movieId}"
+
+    const val MOVIES_SETTINGS = "movies_settings"
     
     fun movieDetail(movieId: Long) = "movie_detail/$movieId"
 }

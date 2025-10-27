@@ -6,6 +6,7 @@ import com.example.series_kotlin_hm.data.repository.MoviesRepository
 import com.example.series_kotlin_hm.domain.interactor.MoviesInteractor
 import com.example.series_kotlin_hm.presentation.mapper.MovieEntityToUiMapper
 import com.example.series_kotlin_hm.presentation.viewmodel.MovieDetailViewModel
+import com.example.series_kotlin_hm.presentation.viewmodel.MoviesSettingsViewModel
 import com.example.series_kotlin_hm.presentation.viewmodel.MoviesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,6 +16,7 @@ val moviesFeatureModule = module {
     // Presentation Layer
     viewModel { MoviesViewModel(get(), get()) }
     viewModel { MovieDetailViewModel(get(), get()) }
+    viewModel { MoviesSettingsViewModel() }
     factory { MovieEntityToUiMapper() }
 
     // Domain Layer

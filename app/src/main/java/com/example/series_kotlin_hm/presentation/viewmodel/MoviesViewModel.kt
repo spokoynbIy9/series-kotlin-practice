@@ -29,7 +29,9 @@ class MoviesViewModel(
     init {
         loadMovies()
     }
-    
+
+    fun onSettingsClick() = {}
+
     private fun loadMovies() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)

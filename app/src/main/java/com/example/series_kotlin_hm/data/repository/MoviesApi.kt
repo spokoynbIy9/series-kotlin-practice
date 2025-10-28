@@ -9,6 +9,7 @@ interface MoviesApi {
     suspend fun getMovies(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
-        @Query("selectFields") selectFields: List<String> = MoviesResponse.getSelectFields()
+        @Query("selectFields") selectFields: List<String> = MoviesResponse.getSelectFields(),
+        @Query("watchability.items.name") watchabilityItemsName: String? = null
     ): MoviesResponse
 }

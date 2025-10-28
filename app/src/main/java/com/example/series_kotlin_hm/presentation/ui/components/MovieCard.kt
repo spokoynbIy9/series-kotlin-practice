@@ -3,6 +3,9 @@ package com.example.series_kotlin_hm.presentation.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +21,9 @@ import com.example.series_kotlin_hm.presentation.model.MovieUiModel
 @Composable
 fun MovieCard(
     movie: MovieUiModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onFavoriteClick: ((MovieUiModel) -> Unit)? = null,
+    isFavorite: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -85,6 +90,20 @@ fun MovieCard(
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+            
+            // Кнопка избранного
+            onFavoriteClick?.let { favoriteClick ->
+                IconButton(
+                    onClick = { favoriteClick(movie) },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Удалить из избранного" else "Добавить в избранное",
+                        tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

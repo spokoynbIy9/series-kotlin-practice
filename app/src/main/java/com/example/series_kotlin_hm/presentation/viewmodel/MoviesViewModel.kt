@@ -26,16 +26,25 @@ class MoviesViewModel(
     private val _uiState = MutableStateFlow(MoviesUiState())
     val uiState: StateFlow<MoviesUiState> = _uiState.asStateFlow()
     
-    init {
-        loadMovies()
-    }
+    private var currentIsOnlyIvi = false
     
-    private fun loadMovies() {
+    init {
+        viewModelScope.launch {
+            interactor.observerIsOnlyIvi().collect { isOnlyIvi ->
+                currentIsOnlyIvi = isOnlyIvi
+                loadMovies(isOnlyIvi)
+            }
+        }
+    }
+
+    fun onSettingsClick() = {}
+
+    private fun loadMovies(isOnlyIvi: Boolean = false) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             
             try {
-                val movies = interactor.getMovies()
+                val movies = interactor.getMovies(isOnlyIvi)
                 val uiMovies = mapper.mapList(movies)
                 
                 _uiState.value = _uiState.value.copy(
@@ -55,6 +64,6 @@ class MoviesViewModel(
     }
     
     fun refreshMovies() {
-        loadMovies()
+        loadMovies(currentIsOnlyIvi)
     }
 }

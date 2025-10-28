@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 
 
 class MoviesSettingsViewModel(
-    private val interactor: MoviesInteractor
+    private val interactor: MoviesInteractor,
+    private val settingsCache: com.example.series_kotlin_hm.data.cache.SettingsCache
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MoviesSettingsState())
     val uiState: StateFlow<MoviesSettingsState> = _uiState.asStateFlow()
@@ -21,6 +22,8 @@ class MoviesSettingsViewModel(
         viewModelScope.launch {
             interactor.observerIsOnlyIvi().collect { isOnlyIvi ->
                 _uiState.update { it.copy(isOnlyIvi = isOnlyIvi) }
+                // Устанавливаем бейдж на основе текущего состояния
+                settingsCache.setHasActiveSettings(isOnlyIvi)
             }
         }
     }
@@ -31,7 +34,11 @@ class MoviesSettingsViewModel(
 
     fun onSaveClicked() {
         viewModelScope.launch {
-            interactor.setMoviesSettings(uiState.value.isOnlyIvi)
+            val isOnlyIvi = uiState.value.isOnlyIvi
+            interactor.setMoviesSettings(isOnlyIvi)
+            
+            // Устанавливаем бейдж, если настройка активна
+            settingsCache.setHasActiveSettings(isOnlyIvi)
         }
     }
 }

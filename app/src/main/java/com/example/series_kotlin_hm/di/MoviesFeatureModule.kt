@@ -20,7 +20,7 @@ val moviesFeatureModule = module {
     // Presentation Layer
     viewModel { MoviesViewModel(get(), get()) }
     viewModel { MovieDetailViewModel(get(), get(), get()) }
-    viewModel { MoviesSettingsViewModel(get()) }
+    viewModel { MoviesSettingsViewModel(get(), get()) }
     viewModel { FavoritesViewModel(get(), get()) }
     factory { MovieEntityToUiMapper() }
 
@@ -39,4 +39,5 @@ val moviesFeatureModule = module {
     single { get<Retrofit>().create(MoviesApi::class.java) }
     single { MoviesRepository(get(), get(), get<androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences>>()) }
     factory { MoviesResponseToEntity() }
+    single { com.example.series_kotlin_hm.data.cache.SettingsCache() }
 }

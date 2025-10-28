@@ -31,9 +31,13 @@ fun MoviesScreen(
     val viewModel: MoviesViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val favoriteDao: FavoriteMovieDao = koinInject()
+    val settingsCache: com.example.series_kotlin_hm.data.cache.SettingsCache = org.koin.compose.koinInject()
     
     // Состояние для отслеживания избранных фильмов
     var favoriteIds by remember { mutableStateOf<Set<Long>>(emptySet()) }
+    
+    // Наблюдаем изменения в settingsCache
+    val hasActiveSettings by settingsCache.hasActiveSettings.collectAsState()
     
     // Загружаем список избранных при старте
     LaunchedEffect(Unit) {
@@ -68,8 +72,21 @@ fun MoviesScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { onSettingsClick()}) {
-                Icon(Icons.Default.Settings, "Settings")
+            Box {
+                FloatingActionButton(onClick = { onSettingsClick()}) {
+                    Icon(Icons.Default.Settings, "Settings")
+                }
+                
+                // Бейдж для активных настроек
+                if (hasActiveSettings) {
+                    Badge(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .align(Alignment.TopEnd)
+                            .offset(x = 12.dp, y = (-6).dp),
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         },
         contentWindowInsets = WindowInsets(0.dp)

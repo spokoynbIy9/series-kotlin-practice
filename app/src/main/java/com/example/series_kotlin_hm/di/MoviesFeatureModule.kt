@@ -16,7 +16,7 @@ val moviesFeatureModule = module {
     // Presentation Layer
     viewModel { MoviesViewModel(get(), get()) }
     viewModel { MovieDetailViewModel(get(), get()) }
-    viewModel { MoviesSettingsViewModel() }
+    viewModel { MoviesSettingsViewModel(get()) }
     factory { MovieEntityToUiMapper() }
 
     // Domain Layer
@@ -24,6 +24,6 @@ val moviesFeatureModule = module {
 
     // Data Layer
     single { get<Retrofit>().create(MoviesApi::class.java) }
-    single { MoviesRepository(get(), get()) }
+    single { MoviesRepository(get(), get(), get<androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences>>()) }
     factory { MoviesResponseToEntity() }
 }

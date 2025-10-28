@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,6 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.series_kotlin_hm.presentation.ui.navigation.BottomNavItem
 import com.example.series_kotlin_hm.presentation.ui.navigation.Routes
+import com.example.series_kotlin_hm.presentation.ui.screen.FavoritesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesSettingsDialog
@@ -68,6 +70,11 @@ fun MainScreen() {
             route = Routes.MOVIES,
             title = "Movies",
             icon = Icons.Default.Search
+        ),
+        BottomNavItem(
+            route = Routes.FAVORITES,
+            title = "Favorites",
+            icon = Icons.Default.Favorite
         )
     )
 
@@ -120,11 +127,12 @@ fun MainScreen() {
             }
             composable(Routes.MOVIE_DETAIL) { backStackEntry ->
                 val movieId = backStackEntry.arguments?.getString("movieId")?.toLongOrNull()
+                val fromFavorites = backStackEntry.arguments?.getString("fromFavorites")?.toBoolean() ?: false
                 val viewModel: MovieDetailViewModel = koinViewModel()
                 val uiState by viewModel.uiState.collectAsState()
 
                 LaunchedEffect(movieId) {
-                    movieId?.let { viewModel.loadMovie(it) }
+                    movieId?.let { viewModel.loadMovie(it, fromFavorites) }
                 }
 
                 when {
@@ -159,6 +167,13 @@ fun MainScreen() {
                         }
                     }
                 }
+            }
+            composable(Routes.FAVORITES) {
+                FavoritesScreen(
+                    onMovieClick = { movie ->
+                        navController.navigate(Routes.movieDetail(movie.id, fromFavorites = true))
+                    }
+                )
             }
         }
     }

@@ -18,7 +18,7 @@ import retrofit2.Retrofit
 
 val moviesFeatureModule = module {
     // Presentation Layer
-    viewModel { MoviesViewModel(get(), get()) }
+    viewModel { MoviesViewModel(get(), get(), get()) }
     viewModel { MovieDetailViewModel(get(), get(), get()) }
     viewModel { MoviesSettingsViewModel(get(), get()) }
     viewModel { FavoritesViewModel(get(), get()) }
@@ -26,6 +26,7 @@ val moviesFeatureModule = module {
 
     // Domain Layer
     single { MoviesInteractor(get()) }
+    single { com.example.series_kotlin_hm.domain.interactor.FavoriteMoviesInteractor(get()) }
 
     // Data Layer
     single {
@@ -36,8 +37,10 @@ val moviesFeatureModule = module {
         ).build()
     }
     single { get<MoviesDatabase>().favoriteMovieDao() }
+    single { com.example.series_kotlin_hm.data.repository.FavoriteMoviesRepository(get(), get()) }
     single { get<Retrofit>().create(MoviesApi::class.java) }
     single { MoviesRepository(get(), get(), get<androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences>>()) }
     factory { MoviesResponseToEntity() }
+    factory { com.example.series_kotlin_hm.data.mapper.FavoriteMovieToEntityMapper() }
     single { com.example.series_kotlin_hm.data.cache.SettingsCache() }
 }

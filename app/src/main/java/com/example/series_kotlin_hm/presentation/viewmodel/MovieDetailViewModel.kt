@@ -2,7 +2,7 @@ package com.example.series_kotlin_hm.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.series_kotlin_hm.data.dao.FavoriteMovieDao
+import com.example.series_kotlin_hm.domain.interactor.FavoriteMoviesInteractor
 import com.example.series_kotlin_hm.domain.interactor.MoviesInteractor
 import com.example.series_kotlin_hm.presentation.mapper.MovieEntityToUiMapper
 import com.example.series_kotlin_hm.presentation.model.MovieUiModel
@@ -19,8 +19,8 @@ data class MovieDetailUiState(
 
 class MovieDetailViewModel(
     private val interactor: MoviesInteractor,
-    private val mapper: MovieEntityToUiMapper,
-    private val favoriteDao: FavoriteMovieDao
+    private val favoriteMoviesInteractor: FavoriteMoviesInteractor,
+    private val mapper: MovieEntityToUiMapper
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailUiState())
@@ -32,19 +32,8 @@ class MovieDetailViewModel(
 
             try {
                 val movie = if (fromFavorites) {
-                    // Загружаем из БД для избранного
-                    val favorite = favoriteDao.getFavoriteById(movieId)
-                    if (favorite != null) {
-                        com.example.series_kotlin_hm.domain.model.MovieEntity(
-                            id = favorite.id,
-                            name = favorite.name,
-                            year = favorite.year,
-                            rating = favorite.rating,
-                            poster = favorite.poster,
-                            genres = favorite.genres.split(",").map { it.trim() },
-                            movieLength = favorite.movieLength
-                        )
-                    } else null
+                    // Загружаем из избранного через interactor
+                    favoriteMoviesInteractor.getFavoriteById(movieId)
                 } else {
                     // Загружаем из API
                     val movies = interactor.getMovies()

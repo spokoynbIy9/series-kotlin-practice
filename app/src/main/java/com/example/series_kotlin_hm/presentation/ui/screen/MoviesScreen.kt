@@ -14,12 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.example.series_kotlin_hm.presentation.model.MovieUiModel
 import com.example.series_kotlin_hm.presentation.ui.components.MovieCard
 import com.example.series_kotlin_hm.presentation.viewmodel.MoviesViewModel
-import com.example.series_kotlin_hm.data.dao.FavoriteMovieDao
-import com.example.series_kotlin_hm.data.entity.FavoriteMovie
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -30,45 +24,11 @@ fun MoviesScreen(
 ) {
     val viewModel: MoviesViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
-    val favoriteDao: FavoriteMovieDao = koinInject()
+    val favoriteIds by viewModel.favoriteIds.collectAsState()
     val settingsCache: com.example.series_kotlin_hm.data.cache.SettingsCache = org.koin.compose.koinInject()
-    
-    // Состояние для отслеживания избранных фильмов
-    var favoriteIds by remember { mutableStateOf<Set<Long>>(emptySet()) }
     
     // Наблюдаем изменения в settingsCache
     val hasActiveSettings by settingsCache.hasActiveSettings.collectAsState()
-    
-    // Загружаем список избранных при старте
-    LaunchedEffect(Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            favoriteDao.getAllFavorites().collect { favorites ->
-                favoriteIds = favorites.map { it.id }.toSet()
-            }
-        }
-    }
-    
-    val onFavoriteClick: (MovieUiModel) -> Unit = { movie ->
-        CoroutineScope(Dispatchers.IO).launch {
-            val existing = favoriteDao.getFavoriteById(movie.id)
-            if (existing != null) {
-                favoriteDao.deleteFavorite(existing)
-            } else {
-                // Добавляем в избранное
-                favoriteDao.insertFavorite(
-                    FavoriteMovie(
-                        id = movie.id,
-                        name = movie.name,
-                        year = movie.year,
-                        rating = movie.rating,
-                        poster = movie.poster,
-                        genres = movie.genres.joinToString(","),
-                        movieLength = movie.movieLength
-                    )
-                )
-            }
-        }
-    }
 
     Scaffold(
         floatingActionButton = {
@@ -184,7 +144,7 @@ fun MoviesScreen(
                                         onClick = {
                                             onMovieClick(movie)
                                         },
-                                        onFavoriteClick = onFavoriteClick,
+                                        onFavoriteClick = { viewModel.toggleFavorite(movie) },
                                         isFavorite = favoriteIds.contains(movie.id)
                                     )
                                 }

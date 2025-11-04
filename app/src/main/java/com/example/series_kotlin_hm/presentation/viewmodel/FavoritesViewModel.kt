@@ -2,8 +2,7 @@ package com.example.series_kotlin_hm.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.series_kotlin_hm.data.dao.FavoriteMovieDao
-import com.example.series_kotlin_hm.data.entity.FavoriteMovie
+import com.example.series_kotlin_hm.domain.interactor.FavoriteMoviesInteractor
 import com.example.series_kotlin_hm.presentation.mapper.MovieEntityToUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +16,7 @@ data class FavoritesUiState(
 )
 
 class FavoritesViewModel(
-    private val favoriteMovieDao: FavoriteMovieDao,
+    private val favoriteMoviesInteractor: FavoriteMoviesInteractor,
     private val mapper: MovieEntityToUiMapper
 ) : ViewModel() {
 
@@ -33,19 +32,7 @@ class FavoritesViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
             try {
-                favoriteMovieDao.getAllFavorites().collect { favoriteMovies ->
-                    val movieEntities = favoriteMovies.map { favorite ->
-                        com.example.series_kotlin_hm.domain.model.MovieEntity(
-                            id = favorite.id,
-                            name = favorite.name,
-                            year = favorite.year,
-                            rating = favorite.rating,
-                            poster = favorite.poster,
-                            genres = favorite.genres.split(",").map { it.trim() },
-                            movieLength = favorite.movieLength
-                        )
-                    }
-                    
+                favoriteMoviesInteractor.getAllFavorites().collect { movieEntities ->
                     val uiMovies = mapper.mapList(movieEntities)
                     
                     _uiState.value = _uiState.value.copy(

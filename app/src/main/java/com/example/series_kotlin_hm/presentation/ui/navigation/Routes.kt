@@ -5,6 +5,8 @@ object Routes {
     const val MOVIES = "movies"
     const val MOVIE_DETAIL = "movie_detail/{movieId}?fromFavorites={fromFavorites}"
     const val FAVORITES = "favorites"
+    const val PROFILE = "profile"
+    const val EDIT_PROFILE = "edit_profile"
 
     const val MOVIES_SETTINGS = "movies_settings"
     

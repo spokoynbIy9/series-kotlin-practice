@@ -1,6 +1,7 @@
 package com.example.series_kotlin_hm.presentation.profile.screen
 
 import android.Manifest
+import android.app.TimePickerDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -16,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -95,6 +97,20 @@ fun EditProfileScreen(
         }
     }
 
+    // Лончер для запроса разрешения на уведомления (Android 13+)
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Разрешение получено, сохраняем профиль и устанавливаем будильник
+            viewModel.onDoneClicked(onBackClick, context)
+        } else {
+            // Разрешение не дано, но все равно сохраняем профиль (без будильника)
+            // или показываем сообщение
+            viewModel.onDoneClicked(onBackClick, context)
+        }
+    }
+
     // Проверка разрешений
     fun checkPermission(permission: String): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -127,8 +143,26 @@ fun EditProfileScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            viewModel.onDoneClicked(onBackClick)
-                        }
+                            if (viewModel.isFormValid()) {
+                                // Проверяем разрешение на уведомления для Android 13+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    val hasPermission = context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) ==
+                                            android.content.pm.PackageManager.PERMISSION_GRANTED
+                                    
+                                    if (!hasPermission && uiState.favoriteClassTime.isNotEmpty()) {
+                                        // Запрашиваем разрешение
+                                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                    } else {
+                                        // Разрешение уже есть или время не указано
+                                        viewModel.onDoneClicked(onBackClick, context)
+                                    }
+                                } else {
+                                    // Для старых версий Android разрешение не нужно
+                                    viewModel.onDoneClicked(onBackClick, context)
+                                }
+                            }
+                        },
+                        enabled = viewModel.isFormValid()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Done,
@@ -252,6 +286,57 @@ fun EditProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
+            // Поле времени любимой пары
+            OutlinedTextField(
+                value = uiState.favoriteClassTime,
+                onValueChange = { viewModel.onFavoriteClassTimeChange(it) },
+                label = { Text("Время любимой пары") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                isError = uiState.favoriteClassTimeError != null,
+                supportingText = uiState.favoriteClassTimeError?.let { error ->
+                    { Text(error, color = MaterialTheme.colorScheme.error) }
+                },
+                trailingIcon = {
+                    IconButton(onClick = { viewModel.showTimePicker() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_clock),
+                            contentDescription = "Выбрать время"
+                        )
+                    }
+                },
+                placeholder = { Text("HH:mm") }
+            )
+
+            // TimePicker диалог
+            if (uiState.showTimePicker) {
+                val currentTime = java.util.Calendar.getInstance()
+                val initialHour = if (uiState.favoriteClassTime.isNotEmpty()) {
+                    uiState.favoriteClassTime.split(":").getOrNull(0)?.toIntOrNull() ?: currentTime.get(java.util.Calendar.HOUR_OF_DAY)
+                } else {
+                    currentTime.get(java.util.Calendar.HOUR_OF_DAY)
+                }
+                val initialMinute = if (uiState.favoriteClassTime.isNotEmpty()) {
+                    uiState.favoriteClassTime.split(":").getOrNull(1)?.toIntOrNull() ?: currentTime.get(java.util.Calendar.MINUTE)
+                } else {
+                    currentTime.get(java.util.Calendar.MINUTE)
+                }
+
+                LaunchedEffect(Unit) {
+                    TimePickerDialog(
+                        context,
+                        { _, hour, minute ->
+                            viewModel.onTimeSelected(hour, minute)
+                        },
+                        initialHour,
+                        initialMinute,
+                        true
+                    ).show()
+                    viewModel.dismissTimePicker()
+                }
+            }
         }
     }
 }
+

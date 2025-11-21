@@ -23,6 +23,7 @@ val mainModule = listOf(
     networkModule,
     moviesFeatureModule,
     playersFeatureModule,
+    profileFeatureModule,
     dataStoreModule
 )
 

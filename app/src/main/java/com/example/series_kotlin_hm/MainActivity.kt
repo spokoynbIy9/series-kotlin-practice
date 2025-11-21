@@ -32,6 +32,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.series_kotlin_hm.presentation.ui.navigation.BottomNavItem
 import com.example.series_kotlin_hm.presentation.ui.navigation.Routes
+import com.example.series_kotlin_hm.presentation.profile.screen.EditProfileScreen
+import com.example.series_kotlin_hm.presentation.profile.screen.ProfileScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.FavoritesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesScreen
@@ -75,6 +77,11 @@ fun MainScreen() {
             route = Routes.FAVORITES,
             title = "Favorites",
             icon = Icons.Default.Favorite
+        ),
+        BottomNavItem(
+            route = Routes.PROFILE,
+            title = "Profile",
+            icon = Icons.Default.Person
         )
     )
 
@@ -172,6 +179,23 @@ fun MainScreen() {
                 FavoritesScreen(
                     onMovieClick = { movie ->
                         navController.navigate(Routes.movieDetail(movie.id, fromFavorites = true))
+                    }
+                )
+            }
+            composable(Routes.PROFILE) {
+                ProfileScreen(
+                    onEditClick = {
+                        navController.navigate(Routes.EDIT_PROFILE)
+                    },
+                    onResumeClick = {
+                        // Будет обработано в ProfileScreen
+                    }
+                )
+            }
+            composable(Routes.EDIT_PROFILE) {
+                EditProfileScreen(
+                    onBackClick = {
+                        navController.popBackStack()
                     }
                 )
             }

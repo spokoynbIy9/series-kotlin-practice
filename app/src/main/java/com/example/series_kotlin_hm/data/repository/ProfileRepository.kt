@@ -19,13 +19,15 @@ class ProfileRepository(
     private val fullNameKey = stringPreferencesKey("profile_full_name")
     private val photoUriKey = stringPreferencesKey("profile_photo_uri")
     private val resumeUrlKey = stringPreferencesKey("profile_resume_url")
+    private val favoriteClassTimeKey = stringPreferencesKey("profile_favorite_class_time")
 
     override fun observeProfile(): Flow<ProfileEntity> {
         return dataStore.data.map { preferences ->
             ProfileEntity(
                 fullName = preferences[fullNameKey] ?: "",
                 photoUri = preferences[photoUriKey] ?: "",
-                resumeUrl = preferences[resumeUrlKey] ?: ""
+                resumeUrl = preferences[resumeUrlKey] ?: "",
+                favoriteClassTime = preferences[favoriteClassTimeKey] ?: ""
             )
         }
     }
@@ -35,19 +37,24 @@ class ProfileRepository(
         ProfileEntity(
             fullName = preferences[fullNameKey] ?: "",
             photoUri = preferences[photoUriKey] ?: "",
-            resumeUrl = preferences[resumeUrlKey] ?: ""
-        ).takeIf { it.fullName.isNotEmpty() || it.photoUri.isNotEmpty() || it.resumeUrl.isNotEmpty() }
+            resumeUrl = preferences[resumeUrlKey] ?: "",
+            favoriteClassTime = preferences[favoriteClassTimeKey] ?: ""
+        ).takeIf { it.fullName.isNotEmpty() || it.photoUri.isNotEmpty() || it.resumeUrl.isNotEmpty() || it.favoriteClassTime.isNotEmpty() }
     }
 
     override suspend fun setProfile(
         fullName: String,
         photoUri: String,
-        resumeUrl: String
-    ) = withContext(Dispatchers.IO) {
-        dataStore.edit { preferences ->
-            preferences[fullNameKey] = fullName
-            preferences[photoUriKey] = photoUri
-            preferences[resumeUrlKey] = resumeUrl
+        resumeUrl: String,
+        favoriteClassTime: String
+    ) {
+        withContext(Dispatchers.IO) {
+            dataStore.edit { preferences ->
+                preferences[fullNameKey] = fullName
+                preferences[photoUriKey] = photoUri
+                preferences[resumeUrlKey] = resumeUrl
+                preferences[favoriteClassTimeKey] = favoriteClassTime
+            }
         }
     }
 }

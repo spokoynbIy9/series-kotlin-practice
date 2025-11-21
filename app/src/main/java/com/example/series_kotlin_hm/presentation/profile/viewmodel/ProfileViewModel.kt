@@ -21,6 +21,7 @@ data class ProfileUiState(
     val fullName: String = "",
     val photoUri: Uri = Uri.EMPTY,
     val resumeUrl: String = "",
+    val favoriteClassTime: String = "",
     val isLoadingResume: Boolean = false,
     val resumeError: String? = null
 )
@@ -38,7 +39,8 @@ class ProfileViewModel(
                 _uiState.value = _uiState.value.copy(
                     fullName = profile.fullName,
                     photoUri = if (profile.photoUri.isNotEmpty()) Uri.parse(profile.photoUri) else Uri.EMPTY,
-                    resumeUrl = profile.resumeUrl
+                    resumeUrl = profile.resumeUrl,
+                    favoriteClassTime = profile.favoriteClassTime
                 )
             }
         }

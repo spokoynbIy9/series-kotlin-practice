@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "series-kotlin-hm"
 include(":app")
+include(":profile:domain")
+include(":profile:data")
+include(":profile:feature")

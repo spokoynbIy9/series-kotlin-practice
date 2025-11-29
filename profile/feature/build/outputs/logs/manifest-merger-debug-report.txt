@@ -1,0 +1,24 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:2:1-8:12
+INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:2:1-8:12
+	package
+		INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:3:5-7:19
+receiver#com.example.series_kotlin_hm.profile.feature.receiver.AlarmReceiver
+ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:4:9-6:40
+	android:exported
+		ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:6:13-37
+	android:name
+		ADDED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:5:13-51
+uses-sdk
+INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml
+INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml

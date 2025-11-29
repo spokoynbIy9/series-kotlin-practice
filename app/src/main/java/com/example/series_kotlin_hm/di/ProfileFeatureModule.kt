@@ -1,10 +1,10 @@
 package com.example.series_kotlin_hm.di
 
-import com.example.series_kotlin_hm.data.repository.ProfileRepository
-import com.example.series_kotlin_hm.domain.interactor.ProfileInteractor
-import com.example.series_kotlin_hm.domain.repository.IProfileRepository
-import com.example.series_kotlin_hm.presentation.profile.viewmodel.EditProfileViewModel
-import com.example.series_kotlin_hm.presentation.profile.viewmodel.ProfileViewModel
+import com.example.series_kotlin_hm.profile.data.repository.ProfileRepository
+import com.example.series_kotlin_hm.profile.domain.interactor.ProfileInteractor
+import com.example.series_kotlin_hm.profile.domain.repository.IProfileRepository
+import com.example.series_kotlin_hm.profile.feature.viewmodel.EditProfileViewModel
+import com.example.series_kotlin_hm.profile.feature.viewmodel.ProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

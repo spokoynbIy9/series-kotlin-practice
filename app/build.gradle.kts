@@ -67,6 +67,12 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     ksp(libs.room.compiler)
     implementation(libs.datastore.preferences)
+    
+    // Profile feature modules
+    implementation(project(":profile:feature"))
+    implementation(project(":profile:domain"))
+    implementation(project(":profile:data"))
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

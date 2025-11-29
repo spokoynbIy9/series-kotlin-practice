@@ -1,0 +1,1 @@
+com.example.series_kotlin_hm.profile.domain

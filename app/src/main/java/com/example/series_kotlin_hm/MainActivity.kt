@@ -1,5 +1,7 @@
 package com.example.series_kotlin_hm
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,14 +34,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.series_kotlin_hm.presentation.ui.navigation.BottomNavItem
 import com.example.series_kotlin_hm.presentation.ui.navigation.Routes
-import com.example.series_kotlin_hm.presentation.profile.screen.EditProfileScreen
-import com.example.series_kotlin_hm.presentation.profile.screen.ProfileScreen
+import com.example.series_kotlin_hm.profile.feature.screen.EditProfileScreen
+import com.example.series_kotlin_hm.profile.feature.screen.ProfileScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.FavoritesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesSettingsDialog
 import com.example.series_kotlin_hm.presentation.ui.screen.PlayersScreen
-import com.example.series_kotlin_hm.presentation.profile.notification.NotificationHelper
+import com.example.series_kotlin_hm.profile.feature.notification.NotificationHelper
+import com.example.series_kotlin_hm.profile.feature.notification.MainActivityIntentProvider
 import com.example.series_kotlin_hm.presentation.ui.theme.SerieskotlinhmTheme
 import com.example.series_kotlin_hm.presentation.viewmodel.MovieDetailViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -50,6 +53,15 @@ class MainActivity : ComponentActivity() {
         
         // Инициализируем канал уведомлений
         NotificationHelper.createNotificationChannel(this)
+        
+        // Устанавливаем провайдер Intent для NotificationHelper
+        NotificationHelper.setIntentProvider(object : MainActivityIntentProvider {
+            override fun getMainActivityIntent(context: Context): Intent {
+                return Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+            }
+        })
         
         enableEdgeToEdge()
         setContent {

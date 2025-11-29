@@ -39,6 +39,7 @@ import com.example.series_kotlin_hm.presentation.ui.screen.MovieDetailScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesScreen
 import com.example.series_kotlin_hm.presentation.ui.screen.MoviesSettingsDialog
 import com.example.series_kotlin_hm.presentation.ui.screen.PlayersScreen
+import com.example.series_kotlin_hm.presentation.profile.notification.NotificationHelper
 import com.example.series_kotlin_hm.presentation.ui.theme.SerieskotlinhmTheme
 import com.example.series_kotlin_hm.presentation.viewmodel.MovieDetailViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -46,6 +47,10 @@ import org.koin.androidx.compose.koinViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Инициализируем канал уведомлений
+        NotificationHelper.createNotificationChannel(this)
+        
         enableEdgeToEdge()
         setContent {
             SerieskotlinhmTheme {

@@ -1,0 +1,17 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.series_kotlin_hm.profile.feature" >
+4
+5    <uses-sdk android:minSdkVersion="24" />
+6
+7    <application>
+7-->/Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:3:5-7:19
+8        <receiver
+8-->/Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:4:9-6:40
+9            android:name="com.example.series_kotlin_hm.profile.feature.receiver.AlarmReceiver"
+9-->/Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:5:13-51
+10            android:exported="false" />
+10-->/Users/user/Desktop/projects-kotlin/series-of-hm/profile/feature/src/main/AndroidManifest.xml:6:13-37
+11    </application>
+12
+13</manifest>

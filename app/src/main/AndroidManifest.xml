@@ -31,9 +31,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver
-            android:name=".presentation.profile.receiver.AlarmReceiver"
-            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
